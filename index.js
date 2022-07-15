@@ -8,16 +8,15 @@ const app = express();
 //Configurar cors
 app.use(cors());
 
+//Parseo y lectura del body
+app.use(express.json());
+
 //Conectando con la BD
 dbConnection();
 
-//rutas
-app.get('/', (req, res) => {
-    res.json({
-        ok: true,
-        msg: 'Hola mundo'
-    });
-})
+//importando rutas
+app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/login', require('./routes/auth'));
 
 //mean_admin
 //E4bzGrlFooLUJVYA
