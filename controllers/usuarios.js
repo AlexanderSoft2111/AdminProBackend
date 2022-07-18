@@ -6,13 +6,30 @@ const { generarToken } = require("../helpers/jwt");
 
 
 const getUsuarios = async(req, res = response) => {
+
+    const desde = Number(req.query.desde) || 0;
     
-    const usuarios = await Usuario.find({}, 'nombre email');
+/*     const usuarios = await Usuario.find({}, 'nombre email')
+                                  .skip(desde)
+                                  .limit(5)
+
+    const total = await Usuario.count(); */
+    
+    //Ejecutando varias promesas y extrayendo los resultados con desestructuración de arreglos
+    const [usuarios, total ] = await Promise.all(
+        [
+            Usuario.find({}, 'nombre email')
+                                  .skip(desde)
+                                  .limit(5),
+            Usuario.count()
+        ]
+        );
 
     res.json({
         ok: true,
         usuarios,
-        uid: req.uid
+        uid: req.uid,
+        total
     });
 }
 
