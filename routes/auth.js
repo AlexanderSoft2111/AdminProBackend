@@ -1,11 +1,12 @@
 /* ruta auth
 
-api/login */
+ruta: api/login */
 
 const {Router} = require('express');
 const { check } = require('express-validator');
+const { validarJWT } = require('../middlewares/validar-jwt');
 
-const { login, loginGoogle } = require('../controllers/auth');
+const { login, loginGoogle, renewToken } = require('../controllers/auth');
 
 
 const router = Router();
@@ -23,6 +24,11 @@ router.post('/google',
         check('token', 'El password es obligatorio').not().isEmpty(),
     ],
     loginGoogle
+);
+
+router.get('/renew',
+    validarJWT,
+    renewToken
 );
 
 module.exports = router;

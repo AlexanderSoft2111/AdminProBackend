@@ -71,7 +71,7 @@ const loginGoogle = async(req, res = response) => {
 
         await usuario.save();
 
-
+        //Generar Token
         const token = await generarToken(usuario.id);
     
         res.json({
@@ -89,7 +89,20 @@ const loginGoogle = async(req, res = response) => {
     }
 }
 
+const renewToken = async(req, res = response) => {
+    const uid = req.uid;
+
+    //Generar Token
+    const token = await generarToken(uid);
+
+    res.json({
+        ok: true,
+        token
+    });
+}
+
 module.exports = {
     login,
-    loginGoogle
+    loginGoogle,
+    renewToken
 }
