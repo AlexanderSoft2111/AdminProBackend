@@ -4,7 +4,7 @@ api/medicos */
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { getMedicos, actualizarMedico, crearMedico, borrarMedicos } = require('../controllers/medicos');
+const { getMedicos, actualizarMedico, crearMedico, borrarMedicos, getMedicoById } = require('../controllers/medicos');
 
 
 const { validarCampos } = require('../middlewares/validar-campos');
@@ -30,8 +30,12 @@ router.put('/:id',
     check('hospital', 'El hospital debe ser un id de mongo válido').isMongoId(),
     validarCampos
 ],
-actualizarMedico)
+actualizarMedico);
 
-router.delete('/:id', validarJWT, borrarMedicos)
+router.delete('/:id', validarJWT, borrarMedicos);
+
+router.get('/:id', 
+validarJWT, 
+getMedicoById);
 
 module.exports = router;

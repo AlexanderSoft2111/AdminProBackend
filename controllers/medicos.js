@@ -1,4 +1,5 @@
 const {response} = require('express');
+const { default: mongoose } = require('mongoose');
 const Medico = require('../models/medico');
 
 const getMedicos = async(req, res = response) => {
@@ -12,6 +13,43 @@ const getMedicos = async(req, res = response) => {
         medicos
     });
 }
+
+const getMedicoById = async(req, res = response) => {
+    const id  = req.params.id;
+    if(mongoose.isValidObjectId(id)){
+        const medico = await Medico.findById(id)
+                                        .populate('usuario', 'nombre email')
+                                        .populate('hospital', 'nombre');
+            if(!medico){
+    
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'no existe un médico con ese ID'
+                });
+            }
+            try {
+                
+               return res.json({
+                    ok: true,
+                    medico
+                });
+            } catch (error) {
+                console.log(error)
+                return res.json({
+                    ok: false,
+                    msg: 'Hable con el administrador'
+                });
+                
+            }
+    } else {
+        return res.status(404).json({
+            ok: false,
+            msg: 'no existe un médico con ese ID'
+        });
+    }
+        
+}
+
 const crearMedico = async(req, res = response) => {
 
     const uid = req.uid;
@@ -69,7 +107,7 @@ const actualizarMedico = async(req, res = response) => {
             msg: 'actualizar Médico',
             medico: medicoActualizado
         });
-    
+        
     } catch (error) {
         console.log(error);
         
@@ -120,5 +158,6 @@ module.exports = {
     getMedicos,
     crearMedico,
     actualizarMedico,
-    borrarMedicos
+    borrarMedicos,
+    getMedicoById
 }

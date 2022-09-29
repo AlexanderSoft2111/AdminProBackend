@@ -59,7 +59,8 @@ const fileUpload = (req, res = response) => {
     
         res.json({
             ok: true,
-            msg: 'Se guardo el archivo'
+            msg: 'Se guardo el archivo',
+            nombreArchivo
         });
     
     });

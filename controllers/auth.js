@@ -95,9 +95,13 @@ const renewToken = async(req, res = response) => {
     //Generar Token
     const token = await generarToken(uid);
 
+    //buscar usuario
+    const usuario = await Usuario.findById(uid);
+
     res.json({
         ok: true,
-        token
+        token,
+        usuario
     });
 }
 
