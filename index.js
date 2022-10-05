@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
+const path = require('path');
 
 const { dbConnection } = require('./database/config');
 const app = express();
@@ -24,6 +25,11 @@ app.use('/api/medicos', require('./routes/medicos'));
 app.use('/api/login', require('./routes/auth'));
 app.use('/api/todo', require('./routes/busqueda'));
 app.use('/api/uploads', require('./routes/uploads'));
+
+//Agregar el path para que cualquier ruta que no este definida caiga en la aplicacion de angular
+app.get('*', (req, res) => {
+    res.sendFile( path.resolve(__dirname, 'public/index.html') );
+})
 
 //mean_admin
 //E4bzGrlFooLUJVYA
